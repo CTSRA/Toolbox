@@ -1,0 +1,9 @@
+# Specify filepatterns you want git to ignore.
+bin
+debug
+release
+*.vsidx
+v18
+Debug
+Release
+packages
