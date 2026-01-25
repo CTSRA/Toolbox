@@ -1,4 +1,9 @@
 <Solution>
-  <Project Path="GenSQLLiteRollArt/SQLLiteRollArtAPI.csproj" />
-  <Project Path="SQLLiteRollArtWin/SQLLiteRollArtWin.csproj" Id="73c1f183-a22b-48f3-86a5-3df4364eae7e" />
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="SQLLiteRollArtWin/SQLLiteRollArtWin.csproj" Id="73c1f183-a22b-48f3-86a5-3df4364eae7e">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
 </Solution>

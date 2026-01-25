@@ -229,12 +229,12 @@ namespace SQLLiteRollArtWin.Forms
                     // ------------------------------------------------------------
 
                     // Base SQLite TEMPLATE (lecture seule)
-                    var templateDbPath = Path.Combine("Templates", "20242025.s3db");
+                    var templateDbPath = Path.Combine("Templates", "20252026.s3db");
 
                     // Base SQLite de travail (copie unique dans le dossier Sqlite)
                     var workingDbPath = Path.Combine(
                         "Sqlite",
-                        $"20242025_{Guid.NewGuid():N}.s3db"
+                        $"20252026_{Guid.NewGuid():N}.s3db"
                     );
 
                     // Copie du template vers la base de travail
@@ -246,11 +246,11 @@ namespace SQLLiteRollArtWin.Forms
 
                     var array = JArray.Parse(jsonContent);
 
-                    // Nettoyage préalable de la table cible
-                   await Task.Run( () =>  Helpers.SqliteHelper.ExecuteRaw(
-                        workingDbPath,
-                        "DELETE FROM Rolskanet;"
-                    ));
+                   // // Nettoyage préalable de la table cible
+                   //await Task.Run( () =>  Helpers.SqliteHelper.ExecuteRaw(
+                   //     workingDbPath,
+                   //     "DELETE FROM Rolskanet WHERE 1=1;"
+                   // ));
 
                     // Insertion JSON → table SQLite
                     await Task.Run(() => Helpers.SqliteHelper.InsertJsonIntoTable(
@@ -265,7 +265,7 @@ namespace SQLLiteRollArtWin.Forms
 
                     var sqlFilePath = Path.Combine(
                         "Templates",
-                        "20242025Init.sql"
+                        "20252026Init.sql"
                     );
 
                     var sqlScript = await Task.Run(() => File.ReadAllText(
@@ -343,15 +343,15 @@ namespace SQLLiteRollArtWin.Forms
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            if (!File.Exists(@".\Templates\20242025.s3db"))
+            if (!File.Exists(@".\Templates\20252026.s3db"))
             {
-                MessageBox.Show(@"Fichier .\Templates\20242025.s3db introuvable.", "Une erreur est survenue!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Fichier .\Templates\20252026.s3db introuvable.", "Une erreur est survenue!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
 
-            if (!File.Exists(@".\Templates\20242025Init.sql"))
+            if (!File.Exists(@".\Templates\20252026Init.sql"))
             {
-                MessageBox.Show(@"Fichier .\Templates\20242025Init.sql introuvable.", "Une erreur est survenue!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Fichier .\Templates\20252026Init.sql introuvable.", "Une erreur est survenue!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
 

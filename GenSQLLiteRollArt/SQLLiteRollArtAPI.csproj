@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="API\Templates\20252026.s3db" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="API\Models\" />
   </ItemGroup>
 
@@ -25,7 +29,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="API\Templates\20252026.s3db" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="API\Templates\20242025.s3db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="API\Templates\20252026Init.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="API\Templates\20242025Init.sql">
