@@ -7,12 +7,8 @@ Delete from Messages;
 Delete from PanelJudge;
 Delete from Participants;
 Delete from Category;
-Delete from GaraRolskanet;
 
-DROP TABLE IF EXISTS Rolskanet
-
-WHERE Manifestation IS NULL
-   OR TRIM(Manifestation) = '';
+CREATE TABLE GaraRolskanet ([IdGara] INTEGER PRIMARY KEY AUTOINCREMENT,Type TEXT, Filiere TEXT, Categorie TEXT);
 
 
 DROP VIEW IF EXISTS BDD_MEDAILLE_DANSE;
@@ -24,6 +20,9 @@ DROP VIEW IF EXISTS BDD_MEDAILLE_FREE;
 DROP VIEW IF EXISTS Ext_medaille_free;
 DROP VIEW IF EXISTS Base_medaille_free;
 
+INSERT INTO PanelJudge(ID_Judge,ID_GaraParams,Role)
+SELECT PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
+FROM GaraParams, PanelExemple;
 
 INSERT INTO GaraRolskanet(Type,Filiere,Categorie)
 SELECT Type,
@@ -106,7 +105,7 @@ count(DISTINCT Rolskanet.[Numéro de licence]) as Participants,
 Sexe,
 'N' as Completed,
 '0',
-'3',
+'$JUDGEQTY$',
 '1',
 '6',
 Competitions.ID_Competition      
@@ -141,7 +140,7 @@ count(DISTINCT Rolskanet.[Groupe]) as Participants,
 Sexe,
 'N' as Completed,
 '0',
-'3',
+'$JUDGEQTY$',
 '1',
 '6',
 Competitions.ID_Competition      

@@ -193,6 +193,13 @@ namespace SQLLiteRollArtWin.Forms
             if (string.IsNullOrEmpty(openFileDialog.FileName))
                 return;
 
+            var formJudge = new FormJudgeQty();
+            formJudge.ShowDialog(this);
+            if(formJudge.DialogResult != DialogResult.OK)
+                return;
+
+            var judgeQty = formJudge.Qty;
+
             try
             {
                 // Curseur "chargement"
@@ -246,11 +253,54 @@ namespace SQLLiteRollArtWin.Forms
 
                     var array = JArray.Parse(jsonContent);
 
-                   // // Nettoyage préalable de la table cible
-                   //await Task.Run( () =>  Helpers.SqliteHelper.ExecuteRaw(
-                   //     workingDbPath,
-                   //     "DELETE FROM Rolskanet WHERE 1=1;"
-                   // ));
+                    // Création de la table rolskanet
+                    await Task.Run(() => Helpers.SqliteHelper.ExecuteRaw(
+                        workingDbPath,
+                        @"
+CREATE TABLE Rolskanet (
+    [Id] INTEGER PRIMARY KEY AUTOINCREMENT,
+    GaraParams TEXT,
+    ""#"" TEXT,
+    ""Manifestation"" TEXT,
+    ""Type"" TEXT,
+    ""Filière"" TEXT,
+    ""Groupe d'épreuve"" TEXT,
+    ""Épreuve"" TEXT,
+    ""Groupe"" TEXT,
+    ""Numéro de licence"" TEXT,
+    ""Nom"" TEXT,
+    ""Numéro de dossard"" TEXT,
+    ""Numéro de transpondeur"" TEXT,
+    ""Prenom"" TEXT,
+    ""Civilité"" TEXT,
+    ""Nationalité"" TEXT,
+    ""Date de naissance"" TEXT,
+    ""Sexe"" TEXT,
+    ""Adresse"" TEXT,
+    ""Code postal"" TEXT,
+    ""Ville"" TEXT,
+    ""Adresse mail"" TEXT,
+    ""Téléphone"" TEXT,
+    ""Portable"" TEXT,
+    ""N°Ligue - Nom Ligue"" TEXT,
+    ""N° Département - Nom Département"" TEXT,
+    ""N° Club"" TEXT,
+    ""Nom Club"" TEXT,
+    ""Licence"" TEXT,
+    ""Discipline"" TEXT,
+    ""Sportif catégorie âge"" TEXT,
+    ""Date de début"" TEXT,
+    ""Date de fin"" TEXT,
+    ""N° - Nom Structure organisatrice"" TEXT,
+    ""Code postal manifestation"" TEXT,
+    ""Commune manifestation"" TEXT,
+    ""Date d'inscription"" TEXT,
+    ""État"" TEXT,
+    ""Commentaire"" TEXT
+);
+"
+                    ));
+
 
                     // Insertion JSON → table SQLite
                     await Task.Run(() => Helpers.SqliteHelper.InsertJsonIntoTable(
@@ -272,6 +322,8 @@ namespace SQLLiteRollArtWin.Forms
                         sqlFilePath,
                         new UTF8Encoding()
                     ));
+
+                    sqlScript = sqlScript.Replace("$JUDGEQTY$", judgeQty.ToString());
 
                     await Task.Run(() => Helpers.SqliteHelper.ExecuteSqlScript(
                         workingDbPath,
