@@ -31,12 +31,12 @@ namespace SQLLiteRollArtWin.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonCsvToSQLite = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.buttonClose = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.buttonCsvToSQLite = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
@@ -61,22 +61,6 @@ namespace SQLLiteRollArtWin.Forms
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(705, 302);
             this.tableLayoutPanel.TabIndex = 0;
-            // 
-            // buttonCsvToSQLite
-            // 
-            this.buttonCsvToSQLite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(26)))), ((int)(((byte)(111)))));
-            this.buttonCsvToSQLite.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonCsvToSQLite.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonCsvToSQLite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCsvToSQLite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCsvToSQLite.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.buttonCsvToSQLite.Location = new System.Drawing.Point(304, 3);
-            this.buttonCsvToSQLite.Name = "buttonCsvToSQLite";
-            this.buttonCsvToSQLite.Size = new System.Drawing.Size(398, 69);
-            this.buttonCsvToSQLite.TabIndex = 1;
-            this.buttonCsvToSQLite.Text = "CSV -> SQLite";
-            this.buttonCsvToSQLite.UseVisualStyleBackColor = false;
-            this.buttonCsvToSQLite.Click += new System.EventHandler(this.buttonCsvToSQLite_Click);
             // 
             // button2
             // 
@@ -107,6 +91,10 @@ namespace SQLLiteRollArtWin.Forms
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "Fichiers CSV (*.csv)|*.csv";
+            // 
             // pictureBox
             // 
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -118,6 +106,24 @@ namespace SQLLiteRollArtWin.Forms
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
+            // 
+            // buttonCsvToSQLite
+            // 
+            this.buttonCsvToSQLite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(26)))), ((int)(((byte)(111)))));
+            this.buttonCsvToSQLite.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCsvToSQLite.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonCsvToSQLite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonCsvToSQLite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCsvToSQLite.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonCsvToSQLite.Image = global::SQLLiteRollArtWin.Properties.Resources.Icon_64x64;
+            this.buttonCsvToSQLite.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonCsvToSQLite.Location = new System.Drawing.Point(304, 3);
+            this.buttonCsvToSQLite.Name = "buttonCsvToSQLite";
+            this.buttonCsvToSQLite.Size = new System.Drawing.Size(398, 69);
+            this.buttonCsvToSQLite.TabIndex = 1;
+            this.buttonCsvToSQLite.Text = "Création compétition";
+            this.buttonCsvToSQLite.UseVisualStyleBackColor = false;
+            this.buttonCsvToSQLite.Click += new System.EventHandler(this.buttonCsvToSQLite_Click);
             // 
             // buttonClose
             // 
@@ -136,10 +142,6 @@ namespace SQLLiteRollArtWin.Forms
             this.buttonClose.Text = "&Fermer";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.Filter = "Fichiers CSV (*.csv)|*.csv";
             // 
             // MainForm
             // 

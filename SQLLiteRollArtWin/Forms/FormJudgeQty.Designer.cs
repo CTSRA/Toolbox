@@ -38,9 +38,12 @@
             // 
             // numericUpDown
             // 
+            this.numericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericUpDown.AutoSize = true;
             this.numericUpDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(26)))), ((int)(((byte)(111)))));
-            this.numericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown.ForeColor = System.Drawing.SystemColors.Window;
             this.numericUpDown.Location = new System.Drawing.Point(3, 3);
             this.numericUpDown.Maximum = new decimal(new int[] {
@@ -54,7 +57,7 @@
             0,
             0});
             this.numericUpDown.Name = "numericUpDown";
-            this.numericUpDown.Size = new System.Drawing.Size(220, 31);
+            this.numericUpDown.Size = new System.Drawing.Size(220, 40);
             this.numericUpDown.TabIndex = 0;
             this.numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown.Value = new decimal(new int[] {
@@ -69,13 +72,15 @@
             this.buttonClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.buttonClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonClose.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonClose.Image = global::SQLLiteRollArtWin.Properties.Resources.Icon_32x32;
             this.buttonClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonClose.Location = new System.Drawing.Point(229, 3);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(132, 29);
+            this.buttonClose.Size = new System.Drawing.Size(132, 41);
             this.buttonClose.TabIndex = 4;
             this.buttonClose.Text = "&Valider";
             this.buttonClose.UseVisualStyleBackColor = false;
@@ -92,7 +97,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(364, 35);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(364, 47);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // FormJudgeQty
@@ -100,7 +105,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(26)))), ((int)(((byte)(111)))));
-            this.ClientSize = new System.Drawing.Size(364, 35);
+            this.ClientSize = new System.Drawing.Size(364, 47);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -111,6 +116,7 @@
             this.Text = "Nombre de juge ?";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

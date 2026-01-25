@@ -20,9 +20,7 @@ DROP VIEW IF EXISTS BDD_MEDAILLE_FREE;
 DROP VIEW IF EXISTS Ext_medaille_free;
 DROP VIEW IF EXISTS Base_medaille_free;
 
-INSERT INTO PanelJudge(ID_Judge,ID_GaraParams,Role)
-SELECT PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
-FROM GaraParams, PanelExemple;
+DELETE FROM PanelExemple WHERE ID_Judge > $JUDGEQTY$ AND ID_Judge < 10;
 
 INSERT INTO GaraRolskanet(Type,Filiere,Categorie)
 SELECT Type,
@@ -270,6 +268,11 @@ UPDATE Participants
  WHERE Participants.ID_GaraParams = WindowOrder.ID_GaraParams AND 
        Participants.ID_Segment = WindowOrder.ID_Segment AND 
        Participants.ID_Atleta = WindowOrder.ID_Atleta;
+
+
+INSERT INTO PanelJudge(ID_Judge,ID_GaraParams,Role)
+SELECT PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
+FROM GaraParams, PanelExemple;
 
 /*
 DROP VIEW IF EXISTS sequence_danse;create view sequence_danse as    SELECT num_licence, name, societa, 'sequence', niveau    FROM BDD_MEDAILLE_DANSE where cat_elem in ('10', '12')    order by num_licence, name, niveau desc;DROP VIEW IF EXISTS total_score;create view total_score As   SELECT num_licence, name,  societa, 'Di' as element,  round(avg(niveau),0) as niveau    FROM BDD_MEDAILLE_DANSE where cat_elem in ('13')    group by num_licence, name, societa     UNION    SELECT num_licence, name, societa, 'Seq'as element,         sum(niveau) as niveau from (SELECT num_licence, name, niveau, ROW_NUMBER() OVER(PARTITION BY num_licence, name) AS row_number,         societa     FROM sequence_danse     order by name, niveau desc) As A    where row_number <= 2     group by num_licence, name, societa       UNION    SELECT num_licence, name, societa, 'Tr'as element, max(niveau) as niveau     FROM BDD_MEDAILLE_DANSE     where  programme in ('Free Dance', 'Style Dance') and element in ('Tr', 'NLT')     group by num_licence, name, societa;DROP VIEW IF EXISTS medailles_danse;
