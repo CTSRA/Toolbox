@@ -10,7 +10,6 @@ Delete from Category;
 
 CREATE TABLE GaraRolskanet ([IdGara] INTEGER PRIMARY KEY AUTOINCREMENT,Type TEXT, Filiere TEXT, Categorie TEXT);
 
-
 DROP VIEW IF EXISTS BDD_MEDAILLE_DANSE;
 DROP VIEW IF EXISTS sequence_danse;
 DROP VIEW IF EXISTS total_score;
@@ -21,6 +20,7 @@ DROP VIEW IF EXISTS Ext_medaille_free;
 DROP VIEW IF EXISTS Base_medaille_free;
 
 DELETE FROM PanelExemple WHERE ID_Judge > $JUDGEQTY$ AND ID_Judge < 10;
+INSERT INTO judges select ID_Judge , role, "", "FRA", 0 from panelexemple;
 
 INSERT INTO GaraRolskanet(Type,Filiere,Categorie)
 SELECT Type,
