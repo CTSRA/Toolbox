@@ -115,7 +115,7 @@ namespace SQLLiteRollArtWin.Forms
             this.buttonCsvToSQLite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCsvToSQLite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCsvToSQLite.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.buttonCsvToSQLite.Image = global::SQLLiteRollArtWin.Properties.Resources.Icon_64x64;
+            this.buttonCsvToSQLite.Image = global::SQLLiteRollArtWin.Properties.Resources.Roller64;
             this.buttonCsvToSQLite.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonCsvToSQLite.Location = new System.Drawing.Point(304, 3);
             this.buttonCsvToSQLite.Name = "buttonCsvToSQLite";

@@ -20,7 +20,7 @@ DROP VIEW IF EXISTS Ext_medaille_free;
 DROP VIEW IF EXISTS Base_medaille_free;
 
 DELETE FROM PanelExemple WHERE ID_Judge > $JUDGEQTY$ AND ID_Judge < 10;
-INSERT INTO judges select ID_Judge , role, "", "FRA", 0 from panelexemple;
+INSERT INTO judges select DISTINCT ID_Judge , role, "", "FRA", 0 from panelexemple;
 
 INSERT INTO GaraRolskanet(Type,Filiere,Categorie)
 SELECT Type,
@@ -88,17 +88,7 @@ Categories.Filiere || ' ' || GaraRolskanet.Categorie,
 Rolskanet.[Commune manifestation] as Place,
 [Date de début],
 [Date de fin],
-CASE 
-    WHEN categories.ID_Category in (21,23,25,27,29) AND Specialites.ID_Specialita in (10,11) then 2
-    WHEN Categories.ID_Category<50 THEN Matrix.ID_Segment
-    WHEN (Categories.ID_Category>=50 AND (Specialites.ID_Specialita=1 OR Specialites.ID_Specialita=2)) THEN 2
-    WHEN (Categories.ID_Category>=50 AND (Specialites.ID_Specialita=5 OR Specialites.ID_Specialita=6)) THEN 4
-    END as ID_Segment,
-Specialites.ID_Specialita,
-CASE 
-    WHEN (Categories.ID_Category>=50 AND (Specialites.ID_Specialita=5 OR Specialites.ID_Specialita=6)) THEN 25
-    ELSE Categories.ID_Category
-END AS ID_Category,
+matrice.ID_Segment, Specialites.ID_Specialita,matrice.ID_Category,
 count(DISTINCT Rolskanet.[Numéro de licence]) as Participants,
 Sexe,
 'N' as Completed,
@@ -110,7 +100,7 @@ Competitions.ID_Competition
 From GaraRolskanet
 INNER JOIN Specialites ON upper(GaraRolskanet.type)=upper(Specialites.Libellé)
 INNER JOIN Categories ON upper(Categories.Categorie)=upper(GaraRolskanet.Categorie) and upper(Categories.Filiere)=upper(GaraRolskanet.Filiere)
-INNER JOIN Matrix ON Matrix.ID_Specialita=Specialites.ID_Specialita AND Matrix.ID_Category=Categories.ID_Category
+INNER JOIN matrice, Segments ON matrice.ID_Specialita=Specialites.ID_Specialita AND matrice.ID_Category=Categories.ID_Category AND Matrice.ID_Segment=Segments.ID_Segments
 INNER JOIN Rolskanet ON upper(Rolskanet.Type)=upper(GaraRolskanet.Type) and upper(Rolskanet.Filière)=upper(GaraRolskanet.Filiere) AND upper(Rolskanet.[Épreuve])=upper(GaraRolskanet.Categorie)
 INNER JOIN Competitions ON upper(Competitions.[Name])=upper(Rolskanet.Manifestation )
 WHERE Specialites.ID_Specialita in (1,2,5,6,10,11)
@@ -123,17 +113,7 @@ Categories.Filiere || ' ' || GaraRolskanet.Categorie,
 Rolskanet.[Commune manifestation] as Place,
 [Date de début],
 [Date de fin],
-CASE 
-    WHEN categories.ID_Category in (21,23,25,27,29) AND Specialites.ID_Specialita in (10,11) then 2
-    WHEN Categories.ID_Category<50 THEN Matrix.ID_Segment
-    WHEN (Categories.ID_Category>=50 AND (Specialites.ID_Specialita=1 OR Specialites.ID_Specialita=2)) THEN 2
-    WHEN (Categories.ID_Category>=50 AND (Specialites.ID_Specialita=5 OR Specialites.ID_Specialita=6)) THEN 4
-    END as ID_Segment,
-Specialites.ID_Specialita,
-CASE 
-    WHEN (Categories.ID_Category>=50 AND (Specialites.ID_Specialita=5 OR Specialites.ID_Specialita=6)) THEN 25
-    ELSE Categories.ID_Category
-END AS ID_Category,
+matrice.ID_Segment, Specialites.ID_Specialita,matrice.ID_Category,
 count(DISTINCT Rolskanet.[Groupe]) as Participants,
 Sexe,
 'N' as Completed,
@@ -145,7 +125,7 @@ Competitions.ID_Competition
 From GaraRolskanet
 INNER JOIN Specialites ON upper(GaraRolskanet.type)=upper(Specialites.Libellé)
 INNER JOIN Categories ON upper(Categories.Categorie)=upper(GaraRolskanet.Categorie) and upper(Categories.Filiere)=upper(GaraRolskanet.Filiere)
-INNER JOIN Matrix ON Matrix.ID_Specialita=Specialites.ID_Specialita AND Matrix.ID_Category=Categories.ID_Category
+INNER JOIN matrice , Segments ON matrice.ID_Specialita=Specialites.ID_Specialita AND matrice.ID_Category=Categories.ID_Category AND Matrice.ID_Segment=Segments.ID_Segments
 INNER JOIN Rolskanet ON upper(Rolskanet.Type)=upper(GaraRolskanet.Type) and upper(Rolskanet.Filière)=upper(GaraRolskanet.Filiere) AND upper(Rolskanet.[Épreuve])=upper(GaraRolskanet.Categorie)
 INNER JOIN Competitions ON upper(Competitions.[Name])=upper(Rolskanet.Manifestation )
 WHERE Specialites.ID_Specialita in (3,4,7,8,9)
@@ -210,7 +190,7 @@ OR
     or substr(Gara.Element, 1, 4 ) = 'NLSt'));
 
 INSERT INTO PanelJudge(ID_Judge,ID_GaraParams,Role)
-SELECT PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
+SELECT distinct PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
 FROM GaraParams, PanelExemple;
 
 INSERT INTO Participants(ID_GaraParams, ID_Segment, ID_Atleta)
@@ -269,10 +249,6 @@ UPDATE Participants
        Participants.ID_Segment = WindowOrder.ID_Segment AND 
        Participants.ID_Atleta = WindowOrder.ID_Atleta;
 
-
-INSERT INTO PanelJudge(ID_Judge,ID_GaraParams,Role)
-SELECT PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
-FROM GaraParams, PanelExemple;
 
 /*
 DROP VIEW IF EXISTS sequence_danse;create view sequence_danse as    SELECT num_licence, name, societa, 'sequence', niveau    FROM BDD_MEDAILLE_DANSE where cat_elem in ('10', '12')    order by num_licence, name, niveau desc;DROP VIEW IF EXISTS total_score;create view total_score As   SELECT num_licence, name,  societa, 'Di' as element,  round(avg(niveau),0) as niveau    FROM BDD_MEDAILLE_DANSE where cat_elem in ('13')    group by num_licence, name, societa     UNION    SELECT num_licence, name, societa, 'Seq'as element,         sum(niveau) as niveau from (SELECT num_licence, name, niveau, ROW_NUMBER() OVER(PARTITION BY num_licence, name) AS row_number,         societa     FROM sequence_danse     order by name, niveau desc) As A    where row_number <= 2     group by num_licence, name, societa       UNION    SELECT num_licence, name, societa, 'Tr'as element, max(niveau) as niveau     FROM BDD_MEDAILLE_DANSE     where  programme in ('Free Dance', 'Style Dance') and element in ('Tr', 'NLT')     group by num_licence, name, societa;DROP VIEW IF EXISTS medailles_danse;
