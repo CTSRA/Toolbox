@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Artistique.ico" />
+    <None Include="Resources\Folder64x64.png" />
     <None Include="Resources\Roller64.png" />
     <None Include="Resources\Icon_64x64.png" />
     <None Include="Resources\Icon_32x321.png" />
