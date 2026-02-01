@@ -29,7 +29,7 @@ namespace SQLLiteRollArtWin.Forms
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -236,15 +236,13 @@ namespace SQLLiteRollArtWin.Forms
                     // ------------------------------------------------------------
                     // 4. Création de la base SQLite de travail à partir du template
                     // ------------------------------------------------------------
+                    var templateDbPath = Path.Combine(AppPaths.TemplatesDir, "20252026.s3db");
 
-                    // Base SQLite TEMPLATE (lecture seule)
-                    var templateDbPath = Path.Combine("Templates", "20252026.s3db");
-
-                    // Base SQLite de travail (copie unique dans le dossier Sqlite)
                     var workingDbPath = Path.Combine(
-                        "Sqlite",
+                        AppPaths.SqliteDir,
                         $"20252026_{Guid.NewGuid():N}.s3db"
                     );
+
 
                     // Copie du template vers la base de travail
                     File.Copy(templateDbPath, workingDbPath, overwrite: false);
@@ -314,11 +312,11 @@ CREATE TABLE Rolskanet (
                     // ------------------------------------------------------------
                     // 6. Exécution du script SQL d’initialisation
                     // ------------------------------------------------------------
-
                     var sqlFilePath = Path.Combine(
-                        "Templates",
+                        AppPaths.TemplatesDir,
                         "20252026Init.sql"
                     );
+
 
                     var sqlScript = await Task.Run(() => File.ReadAllText(
                         sqlFilePath,
@@ -341,7 +339,7 @@ CREATE TABLE Rolskanet (
 
                     // Nettoyage du nom pour qu’il soit valide en tant que nom de fichier
                     var manifestationDbPath = Path.Combine(
-                        "Sqlite",
+                        AppPaths.SqliteDir,
                         $"{MakeSafeFileName(manifestation)}.s3db"
                     );
 
@@ -350,7 +348,7 @@ CREATE TABLE Rolskanet (
                     // ------------------------------------------------------------
 
                     // Renommage de la base de travail vers son nom final
-                    if(File.Exists(manifestationDbPath))
+                    if (File.Exists(manifestationDbPath))
                         File.Delete(manifestationDbPath);
 
                     File.Move(workingDbPath, manifestationDbPath);
@@ -397,20 +395,38 @@ CREATE TABLE Rolskanet (
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            if (!File.Exists(@".\Templates\20252026.s3db"))
+            var templateDb = Path.Combine(AppPaths.TemplatesDir, "20252026.s3db");
+            var templateSql = Path.Combine(AppPaths.TemplatesDir, "20252026Init.sql");
+
+            if (!File.Exists(templateDb) || !File.Exists(templateSql))
             {
-                MessageBox.Show(@"Fichier .\Templates\20252026.s3db introuvable.", "Une erreur est survenue!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
+                MessageBox.Show("Templates manquants.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                return;
             }
 
-            if (!File.Exists(@".\Templates\20252026Init.sql"))
-            {
-                MessageBox.Show(@"Fichier .\Templates\20252026Init.sql introuvable.", "Une erreur est survenue!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
-            }
+            Directory.CreateDirectory(AppPaths.SqliteDir);
 
-            if (!Directory.Exists(@".\Sqlite"))
-                Directory.CreateDirectory("Sqlite");
+            var userDb = Path.Combine(AppPaths.SqliteDir, "20252026.s3db");
+
+            if (!File.Exists(userDb))
+                File.Copy(templateDb, userDb);
         }
+
+
+    }
+    public static class AppPaths
+    {
+        public static string AppDir => AppDomain.CurrentDomain.BaseDirectory;
+
+        public static string TemplatesDir => Path.Combine(AppDir, "Templates");
+
+        public static string AppDataRoot =>
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "SQLLiteRollArtWin"
+            );
+
+        public static string SqliteDir => Path.Combine(AppDataRoot, "Sqlite");
     }
 }
