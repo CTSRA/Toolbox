@@ -182,6 +182,7 @@
     <Content Include="Artistique.ico" />
     <None Include="Resources\ranking-star-solid-full64.png" />
     <None Include="Resources\medal-solid-full.png" />
+    <Content Include="RollArtManager.iss" />
     <Content Include="Templates\ranking.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

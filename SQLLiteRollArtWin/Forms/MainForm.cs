@@ -123,7 +123,7 @@ namespace SQLLiteRollArtWin.Forms
             this.buttonMedals.TabIndex = 3;
             this.buttonMedals.Text = "Médaille";
             this.buttonMedals.UseVisualStyleBackColor = true;
-            this.buttonMedals.Click += new System.EventHandler(this.button3_Click);
+            this.buttonMedals.Click += new System.EventHandler(this.buttonMedals_Click);
             // 
             // buttonClose
             // 
@@ -486,6 +486,44 @@ CREATE TABLE Rolskanet (
 
             Helpers.Datatable.DataTableToCsv(table, rankingCSVPath);
             
+            System.Diagnostics.Process.Start(
+                "explorer.exe",
+                "/select,\"" + rankingCSVPath + "\""
+            );
+        }
+
+        private async void buttonMedals_Click(object sender, EventArgs e)
+        {
+            // Ouverture de la boîte de dialogue de sélection de fichier
+            if (openFileDialogs3db.ShowDialog() != DialogResult.OK)
+                return;
+
+            // Sécurité : aucun fichier sélectionné
+            if (string.IsNullOrEmpty(openFileDialogs3db.FileName))
+                return;
+
+
+            var rankingSQLScript = Path.Combine(AppPaths.TemplatesDir, "medals.sql");
+            var sqlScript = await Task.Run(() => File.ReadAllText(
+                rankingSQLScript,
+                new UTF8Encoding()
+            ));
+
+
+            var table = await Task.Run(() => Helpers.SqliteHelper.ExecuteSqlReader(
+                openFileDialogs3db.FileName,
+                sqlScript
+            ));
+
+            var rankingCSVFilneName = "Médailles " + Path.GetFileNameWithoutExtension(openFileDialogs3db.FileName);
+
+            var rankingCSVPath = Path.Combine(
+                AppPaths.SqliteDir,
+                $"{MakeSafeFileName(rankingCSVFilneName)}.csv"
+            );
+
+            Helpers.Datatable.DataTableToCsv(table, rankingCSVPath);
+
             System.Diagnostics.Process.Start(
                 "explorer.exe",
                 "/select,\"" + rankingCSVPath + "\""
