@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace SQLLiteRollArtWin.Helpers
 {
@@ -246,7 +247,23 @@ namespace SQLLiteRollArtWin.Helpers
             }
         }
 
+        public static DataTable ExecuteSqlReader(string dbPath, string sql)
+        {
+            var dt = new DataTable();
 
+            using (var con = new SQLiteConnection($"Data Source={dbPath};Version=3;"))
+            {
+                con.Open();
+
+                using (var cmd = new SQLiteCommand(sql, con))
+                using (var adapter = new SQLiteDataAdapter(cmd))
+                {
+                    adapter.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
 
     }
 }

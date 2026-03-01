@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Folder64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Folder64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Artistique" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Artistique.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -130,13 +133,19 @@
   <data name="Roller64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Roller64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ranking-star-solid-full64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ranking-star-solid-full64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Icon_64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fermer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\fermer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Folder64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Folder64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ranking-star-solid-full641" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ranking-star-solid-full641.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medal-solid-full" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\medal-solid-full.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

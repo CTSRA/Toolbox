@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,11 +15,12 @@ namespace SQLLiteRollArtWin.Forms
     {
         private PictureBox pictureBox;
         private Button buttonCsvToSQLite;
-        private Button button2;
-        private Button button3;
+        private Button buttonRanking;
+        private Button buttonMedals;
         private Button buttonClose;
         private OpenFileDialog openFileDialog;
         private Button buttonOpenSQLite;
+        private OpenFileDialog openFileDialogs3db;
         private TableLayoutPanel tableLayoutPanel;
 
         public MainForm()
@@ -32,13 +34,14 @@ namespace SQLLiteRollArtWin.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialogs3db = new System.Windows.Forms.OpenFileDialog();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buttonRanking = new System.Windows.Forms.Button();
+            this.buttonMedals = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonCsvToSQLite = new System.Windows.Forms.Button();
             this.buttonOpenSQLite = new System.Windows.Forms.Button();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
@@ -50,8 +53,8 @@ namespace SQLLiteRollArtWin.Forms
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 82F));
             this.tableLayoutPanel.Controls.Add(this.pictureBox, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.button2, 1, 1);
-            this.tableLayoutPanel.Controls.Add(this.button3, 1, 2);
+            this.tableLayoutPanel.Controls.Add(this.buttonRanking, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.buttonMedals, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.buttonClose, 1, 3);
             this.tableLayoutPanel.Controls.Add(this.buttonCsvToSQLite, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.buttonOpenSQLite, 2, 0);
@@ -66,6 +69,14 @@ namespace SQLLiteRollArtWin.Forms
             this.tableLayoutPanel.Size = new System.Drawing.Size(705, 302);
             this.tableLayoutPanel.TabIndex = 0;
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "Fichiers CSV (*.csv)|*.csv";
+            // 
+            // openFileDialogs3db
+            // 
+            this.openFileDialogs3db.Filter = "Fichiers S3DB (*.s3db)|*.s3db";
+            // 
             // pictureBox
             // 
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -78,36 +89,41 @@ namespace SQLLiteRollArtWin.Forms
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
-            // button2
+            // buttonRanking
             // 
-            this.tableLayoutPanel.SetColumnSpan(this.button2, 2);
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button2.Enabled = false;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.button2.Location = new System.Drawing.Point(304, 78);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(398, 69);
-            this.button2.TabIndex = 2;
-            this.button2.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel.SetColumnSpan(this.buttonRanking, 2);
+            this.buttonRanking.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonRanking.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonRanking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRanking.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRanking.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonRanking.Image = global::SQLLiteRollArtWin.Properties.Resources.ranking_star_solid_full641;
+            this.buttonRanking.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonRanking.Location = new System.Drawing.Point(304, 78);
+            this.buttonRanking.Name = "buttonRanking";
+            this.buttonRanking.Size = new System.Drawing.Size(398, 69);
+            this.buttonRanking.TabIndex = 2;
+            this.buttonRanking.Text = "Ranking";
+            this.buttonRanking.UseVisualStyleBackColor = true;
+            this.buttonRanking.Click += new System.EventHandler(this.buttonRanking_Click);
             // 
-            // button3
+            // buttonMedals
             // 
-            this.tableLayoutPanel.SetColumnSpan(this.button3, 2);
-            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button3.Enabled = false;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.button3.Location = new System.Drawing.Point(304, 153);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(398, 69);
-            this.button3.TabIndex = 3;
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.tableLayoutPanel.SetColumnSpan(this.buttonMedals, 2);
+            this.buttonMedals.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonMedals.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonMedals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMedals.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMedals.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonMedals.Image = global::SQLLiteRollArtWin.Properties.Resources.medal_solid_full;
+            this.buttonMedals.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonMedals.Location = new System.Drawing.Point(304, 153);
+            this.buttonMedals.Name = "buttonMedals";
+            this.buttonMedals.Size = new System.Drawing.Size(398, 69);
+            this.buttonMedals.TabIndex = 3;
+            this.buttonMedals.Text = "Médaille";
+            this.buttonMedals.UseVisualStyleBackColor = true;
+            this.buttonMedals.Click += new System.EventHandler(this.button3_Click);
             // 
             // buttonClose
             // 
@@ -161,10 +177,6 @@ namespace SQLLiteRollArtWin.Forms
             this.buttonOpenSQLite.TabIndex = 4;
             this.buttonOpenSQLite.UseVisualStyleBackColor = false;
             this.buttonOpenSQLite.Click += new System.EventHandler(this.buttonOpenSQLite_Click);
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.Filter = "Fichiers CSV (*.csv)|*.csv";
             // 
             // MainForm
             // 
@@ -439,6 +451,45 @@ CREATE TABLE Rolskanet (
         private void buttonOpenSQLite_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("explorer.exe",AppPaths.SqliteDir);
+        }
+
+        private async void buttonRanking_Click(object sender, EventArgs e)
+        {
+
+            // Ouverture de la boîte de dialogue de sélection de fichier
+            if (openFileDialogs3db.ShowDialog() != DialogResult.OK)
+                return;
+
+            // Sécurité : aucun fichier sélectionné
+            if (string.IsNullOrEmpty(openFileDialogs3db.FileName))
+                return;
+
+
+            var rankingSQLScript = Path.Combine(AppPaths.TemplatesDir, "ranking.sql");
+            var sqlScript = await Task.Run(() => File.ReadAllText(
+                rankingSQLScript,
+                new UTF8Encoding()
+            ));
+
+
+            var table = await Task.Run(() => Helpers.SqliteHelper.ExecuteSqlReader(
+                openFileDialogs3db.FileName,
+                sqlScript
+            ));
+
+            var rankingCSVFilneName= "Ranking " +  Path.GetFileNameWithoutExtension(openFileDialogs3db.FileName);
+
+            var rankingCSVPath = Path.Combine(
+                AppPaths.SqliteDir,
+                $"{MakeSafeFileName(rankingCSVFilneName)}.csv"
+            );
+
+            Helpers.Datatable.DataTableToCsv(table, rankingCSVPath);
+            
+            System.Diagnostics.Process.Start(
+                "explorer.exe",
+                "/select,\"" + rankingCSVPath + "\""
+            );
         }
     }
     public static class AppPaths

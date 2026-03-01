@@ -123,6 +123,36 @@ namespace SQLLiteRollArtWin.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap medal_solid_full {
+            get {
+                object obj = ResourceManager.GetObject("medal-solid-full", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ranking_star_solid_full64 {
+            get {
+                object obj = ResourceManager.GetObject("ranking-star-solid-full64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ranking_star_solid_full641 {
+            get {
+                object obj = ResourceManager.GetObject("ranking-star-solid-full641", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Roller64 {
             get {
                 object obj = ResourceManager.GetObject("Roller64", resourceCulture);
