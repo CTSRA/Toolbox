@@ -80,15 +80,15 @@ FROM Rolskanet
 ON upper(Rolskanet.type) = upper(Specialites.Libellé)
 WHERE Rolskanet.Groupe = '-';
 
-
 INSERT INTO GaraParams(ID_GaraParams,Name,PLace,Date,DateEnd,ID_Segment,ID_Specialita,ID_Category,Partecipants,Sex,Completed,LastPartecipant,NumJudges,Factor,SkatersPerGroup,ID_Competition)
-select 
-GaraRolskanet.IdGara,
-Categories.Filiere || ' ' || GaraRolskanet.Categorie,
-Rolskanet.[Commune manifestation] as Place,
+select
+    GaraRolskanet.IdGara,
+    Categories.Filiere || ' ' || GaraRolskanet.Categorie,
+    Rolskanet.[Commune manifestation] as Place,
 [Date de début],
 [Date de fin],
-matrice.ID_Segment, Specialites.ID_Specialita,matrice.ID_Category,
+matrice.ID_Segment, Specialites.ID_Specialita,
+CASE WHEN (Categories.ID_Category in (20,22,24,26,27,28,29,31) AND (Specialites.ID_Specialita=5 OR Specialites.ID_Specialita=6)) THEN 25 ELSE matrice.ID_Category END as id_category,
 count(DISTINCT Rolskanet.[Numéro de licence]) as Participants,
 Sexe,
 'N' as Completed,
