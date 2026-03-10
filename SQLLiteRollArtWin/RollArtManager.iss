@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "RollArtManager"
-#define MyAppVersion "4.0.0"
+#define MyAppVersion "5.0.0"
 #define MyAppPublisher "CTSRA"
 #define MyAppExeName "SQLLiteRollArtWin.exe"
 #define MyAppAssocName MyAppName + " File"

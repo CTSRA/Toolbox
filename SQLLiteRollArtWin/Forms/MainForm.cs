@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -515,19 +516,41 @@ CREATE TABLE Rolskanet (
                 sqlScript
             ));
 
-            var rankingCSVFilneName = "Médailles " + Path.GetFileNameWithoutExtension(openFileDialogs3db.FileName);
+            if(table?.Rows.Count == 0) return;
 
-            var rankingCSVPath = Path.Combine(
-                AppPaths.SqliteDir,
-                $"{MakeSafeFileName(rankingCSVFilneName)}.csv"
-            );
+            var danseRows = table.Select("typeMédaille = 'danse'");
+            var freeRows = table.Select("typeMédaille = 'free'");
 
-            Helpers.Datatable.DataTableToCsv(table, rankingCSVPath);
+            var tablesParMedaille = danseRows
+                .GroupBy(r => r.Field<string>("commentaires"))
+                .Select(g => g.CopyToDataTable())
+                .ToList();
+            
+            var rankingCSVFilneName = Path.GetFileNameWithoutExtension(openFileDialogs3db.FileName);
+            ExportRows(danseRows, "Danse", rankingCSVFilneName);
+            ExportRows(freeRows, "Free", rankingCSVFilneName);
 
-            System.Diagnostics.Process.Start(
-                "explorer.exe",
-                "/select,\"" + rankingCSVPath + "\""
-            );
+
+            System.Diagnostics.Process.Start("explorer.exe", AppPaths.SqliteDir );
+        }
+
+        void ExportRows(DataRow[] rows, string type, string rankingCSVFilneName)
+        {
+            var tables = rows
+                .GroupBy(r => r["commentaires"].ToString())
+                .Select(g => g.CopyToDataTable())
+                .ToList();
+
+            foreach (var tableMedaille in tables)
+            {
+                tableMedaille.Columns.Remove("typeMédaille");
+
+                var medaille = tableMedaille.Rows[0]["commentaires"].ToString();
+                var nomFichier = $"{medaille} {type} {rankingCSVFilneName}";
+
+                var path = Path.Combine(AppPaths.SqliteDir, $"{MakeSafeFileName(nomFichier)}.csv");
+                Helpers.Datatable.DataTableToCsv(tableMedaille, path);
+            }
         }
     }
     public static class AppPaths
