@@ -110,35 +110,34 @@ SELECT num_licence_athlete, name, Societa, num_licence,
             WHEN (A1+A2+A3)>=1
                  AND (Ju2+Ju3)>=2
                  AND (S>=1 AND (S+C+He+Iv+Br)>=3)
-                 AND FoSq>=1
+                 AND FoSq>='1'
            THEN 'Médaille Platine'
            WHEN (A1+A2+A3)>=1
                  AND (Ju2+Ju3)>=2
                  AND (S>=1 AND C>=1)
-                 AND FoSq>=0
+                 AND FoSq>='0'
            THEN 'Médaille Or'
            WHEN (A1+A2+A3)>=1
                  AND (Ju2+Ju3)>=1
                  AND (S>=1 OR C>=1)
-                 AND FoSq>=0
+                 AND FoSq>='0'
            THEN 'Médaille Vermeil'
            WHEN (A1+A2+A3)>=1
                  AND (S>=1 OR C>=1)
-                 AND FoSq>=0
+                 AND FoSq>='0'
            THEN 'Médaille Argent'
            WHEN (Ju1+Ju2+Ju3)>=4
                  AND (U+S+C+He+Iv+Br+UB)>=1
-                 AND FoSq>=0
+                 AND FoSq>='0'
            THEN 'Médaille Bronze'
            WHEN (Ju1+Ju2+Ju3)>=2
                  AND (U+S+C+He+Iv+Br+UB)>=1
-                 AND FoSq>=0
+                 AND FoSq>='0'
            THEN 'Médaille Préliminaire'
            ELSE '------'
        END as médaille                             
 FROM Ext_Medaille_free
 Order by médaille,name;
-
 
 
 
@@ -201,11 +200,19 @@ IIF( total = 5 , 'Médaille Or',
 IIF( total >= 6 , 'Médaille Platine','------'))))))) as médaille from ext Order by médaille, name;
 
 
-select distinct 'free' typeMédaille, num_licence_athlete "Numéro de licence", (select max(DateEnd) from GaraParams) "date d'obtention", '' "date de fin", (select DISTINCT Place from GaraParams) "lieu d'obtention", 'FFRS' "code structure" , num_licence "numéro de licence du formateur / examinateur ", médaille commentaires
+--select distinct 'free' typeMédaille, num_licence_athlete "Numéro de licence", (select max(DateEnd) from GaraParams) "date d'obtention", '' "date de fin", (select DISTINCT Place from GaraParams) "lieu d'obtention", 'FFRS' "code structure" , num_licence "numéro de licence du formateur / examinateur ", médaille commentaires
+--from Base_medaille_free, GaraParams where médaille <> '------'
+--UNION
+--select distinct 'danse' typeMédaille, a.num_licence "Numéro de licence",  (select max(DateEnd) from GaraParams) "date d'obtention", '' "date de fin",  (select DISTINCT Place from GaraParams) "lieu d'obtention",  'FFRS' "code structure", "numéro de licence du formateur / examinateur ", médaille commentaires
+--from medailles_danse a, GaraParams b, PanelJudge c, Judges d where médaille <> '------' and b.ID_GaraParams = c.ID_GaraParams and c.ID_Judge = d.ID_Judge and Role = 'Referee'
+--order by médaille;
+
+
+select distinct 'free' typeMédaille, num_licence_athlete "Numéro de licence", (select substr(max(DateEnd), 1, 10) from GaraParams) "date d'obtention", '' "date de fin", '' "numero_diplome",(
+    select DISTINCT Place from GaraParams) "lieu d'obtention", 'FFRS' "code structure" , num_licence "numéro de licence du formateur / examinateur ", médaille commentaires
 from Base_medaille_free, GaraParams where médaille <> '------'
 UNION
-select distinct 'danse' typeMédaille, a.num_licence "Numéro de licence",  (select max(DateEnd) from GaraParams) "date d'obtention", '' "date de fin",  (select DISTINCT Place from GaraParams) "lieu d'obtention",  'FFRS' "code structure", "numéro de licence du formateur / examinateur ", médaille commentaires
-from medailles_danse a, GaraParams b, PanelJudge c, Judges d where médaille <> '------' and b.ID_GaraParams = c.ID_GaraParams and c.ID_Judge = d.ID_Judge and Role = 'Referee'
+select distinct 'danse' typeMédaille, a.num_licence "Numéro de licence",  (select  substr(max(DateEnd), 1, 10) from GaraParams) "date d'obtention", '' "date de fin",  '' "numero_diplome",(
+    select DISTINCT Place from GaraParams) "lieu d'obtention",  'FFRS' "code structure", d.num_licence "numéro de licence du formateur / examinateur ", médaille commentaires from
+                                                                                                                                                                                  medailles_danse a, GaraParams b, PanelJudge c, Judges d where médaille <> '------' and b.ID_GaraParams = c.ID_GaraParams and c.ID_Judge = d.ID_Judge and Role = 'Referee'
 order by médaille;
-
-

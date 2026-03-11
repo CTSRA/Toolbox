@@ -32,8 +32,16 @@ namespace SQLLiteRollArtWin.Helpers
             // ================================
             foreach (DataRow row in dt.Rows)
             {
-                var fields = row.ItemArray
-                    .Select(field => EscapeCsv(field?.ToString()));
+                var fields = row.ItemArray.Select(field =>
+                {
+                    if (field == null || field == DBNull.Value)
+                        return "";
+
+                    if (field is DateTime dtValue)
+                        return EscapeCsv(dtValue.ToString("dd/MM/yyyy"));
+
+                    return EscapeCsv(field.ToString());
+                });
 
                 sb.AppendLine(string.Join(";", fields));
             }
