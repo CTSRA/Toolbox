@@ -233,7 +233,7 @@ namespace SQLLiteRollArtWin.Forms
 
             var formJudge = new FormJudgeQty();
             formJudge.ShowDialog(this);
-            if(formJudge.DialogResult != DialogResult.OK)
+            if (formJudge.DialogResult != DialogResult.OK)
                 return;
 
             var judgeQty = formJudge.Qty;
@@ -278,7 +278,6 @@ namespace SQLLiteRollArtWin.Forms
                         AppPaths.SqliteDir,
                         $"20252026_{Guid.NewGuid():N}.s3db"
                     );
-
 
                     // Copie du template vers la base de travail
                     File.Copy(templateDbPath, workingDbPath, overwrite: false);
@@ -390,8 +389,7 @@ CREATE TABLE Rolskanet (
                     File.Move(workingDbPath, manifestationDbPath);
 
                     // ------------------------------------------------------------
-                    // 9. Ouverture de l’explorateur Windows sur le fichier généré
-                    // ------------------------------------------------------------
+                    // 9. Ouverture de l’explorateur Windows sur le fichier généré// ------------------------------------------------------------
 
                     System.Diagnostics.Process.Start(
                         "explorer.exe",
@@ -401,9 +399,6 @@ CREATE TABLE Rolskanet (
             }
             catch (Exception ex)
             {
-                // ------------------------------------------------------------
-                // Gestion centralisée des erreurs
-                // ------------------------------------------------------------
 
                 MessageBox.Show(
                     ex.Message,
@@ -451,89 +446,114 @@ CREATE TABLE Rolskanet (
 
         private void buttonOpenSQLite_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("explorer.exe",AppPaths.SqliteDir);
+            System.Diagnostics.Process.Start("explorer.exe", AppPaths.SqliteDir);
         }
-
         private async void buttonRanking_Click(object sender, EventArgs e)
         {
-
-            // Ouverture de la boîte de dialogue de sélection de fichier
             if (openFileDialogs3db.ShowDialog() != DialogResult.OK)
                 return;
 
-            // Sécurité : aucun fichier sélectionné
-            if (string.IsNullOrEmpty(openFileDialogs3db.FileName))
+            var sourceFile = openFileDialogs3db.FileName;
+
+            if (string.IsNullOrEmpty(sourceFile))
                 return;
 
+            try
+            {
+                var table = await ExecuteSqliteScriptOnCopyAsync(
+                    sourceFile,
+                    "ranking.sql",
+                    "rk_copie"
+                );
 
-            var rankingSQLScript = Path.Combine(AppPaths.TemplatesDir, "ranking.sql");
-            var sqlScript = await Task.Run(() => File.ReadAllText(
-                rankingSQLScript,
-                new UTF8Encoding()
-            ));
+                var rankingCSVFileName = "Ranking " + Path.GetFileNameWithoutExtension(sourceFile);
 
+                var rankingCSVPath = Path.Combine(
+                    AppPaths.SqliteDir,
+                    $"{MakeSafeFileName(rankingCSVFileName)}.csv"
+                );
 
-            var table = await Task.Run(() => Helpers.SqliteHelper.ExecuteSqlReader(
-                openFileDialogs3db.FileName,
-                sqlScript
-            ));
+                Helpers.Datatable.DataTableToCsv(table, rankingCSVPath);
 
-            var rankingCSVFilneName= "Ranking " +  Path.GetFileNameWithoutExtension(openFileDialogs3db.FileName);
-
-            var rankingCSVPath = Path.Combine(
-                AppPaths.SqliteDir,
-                $"{MakeSafeFileName(rankingCSVFilneName)}.csv"
-            );
-
-            Helpers.Datatable.DataTableToCsv(table, rankingCSVPath);
-            
-            System.Diagnostics.Process.Start(
-                "explorer.exe",
-                "/select,\"" + rankingCSVPath + "\""
-            );
+                System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{rankingCSVPath}\"");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Une erreur est survenue!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
-
         private async void buttonMedals_Click(object sender, EventArgs e)
         {
-            // Ouverture de la boîte de dialogue de sélection de fichier
             if (openFileDialogs3db.ShowDialog() != DialogResult.OK)
                 return;
 
-            // Sécurité : aucun fichier sélectionné
-            if (string.IsNullOrEmpty(openFileDialogs3db.FileName))
+            var sourceFile = openFileDialogs3db.FileName;
+
+            if (string.IsNullOrEmpty(sourceFile))
                 return;
 
+            try
+            {
+                var table = await ExecuteSqliteScriptOnCopyAsync(
+                    sourceFile,
+                    "medals.sql",
+                    "md_copie"
+                );
 
-            var rankingSQLScript = Path.Combine(AppPaths.TemplatesDir, "medals.sql");
-            var sqlScript = await Task.Run(() => File.ReadAllText(
-                rankingSQLScript,
-                new UTF8Encoding()
-            ));
+                if (table == null || table.Rows.Count == 0)
+                    return;
 
+                var danseRows = table.Select("typeMédaille = 'danse'");
+                var freeRows = table.Select("typeMédaille = 'free'");
 
-            var table = await Task.Run(() => Helpers.SqliteHelper.ExecuteSqlReader(
-                openFileDialogs3db.FileName,
-                sqlScript
-            ));
+                var rankingCSVFileName = Path.GetFileNameWithoutExtension(sourceFile);
 
-            if(table?.Rows.Count == 0) return;
+                ExportRows(danseRows, "Danse", rankingCSVFileName);
+                ExportRows(freeRows, "Free", rankingCSVFileName);
 
-            var danseRows = table.Select("typeMédaille = 'danse'");
-            var freeRows = table.Select("typeMédaille = 'free'");
-
-            var tablesParMedaille = danseRows
-                .GroupBy(r => r.Field<string>("commentaires"))
-                .Select(g => g.CopyToDataTable())
-                .ToList();
-            
-            var rankingCSVFilneName = Path.GetFileNameWithoutExtension(openFileDialogs3db.FileName);
-            ExportRows(danseRows, "Danse", rankingCSVFilneName);
-            ExportRows(freeRows, "Free", rankingCSVFilneName);
-
-
-            System.Diagnostics.Process.Start("explorer.exe", AppPaths.SqliteDir );
+                System.Diagnostics.Process.Start("explorer.exe", AppPaths.SqliteDir);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Une erreur est survenue!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
+        private async Task<DataTable> ExecuteSqliteScriptOnCopyAsync(string sourceFile, string sqlFileName, string copySuffix)
+        {
+            var dbCopyFileName = Path.Combine(Path.GetDirectoryName(sourceFile), $"{Guid.NewGuid()}_{copySuffix}.s3db");
+
+            try
+            {
+                File.Copy(sourceFile, dbCopyFileName);
+
+                var sqlPath = Path.Combine(AppPaths.TemplatesDir, sqlFileName);
+
+                var sqlScript = await Task.Run(() => File.ReadAllText(sqlPath));
+
+                return await Task.Run(() =>
+                    Helpers.SqliteHelper.ExecuteSqlReader(dbCopyFileName, sqlScript)
+                );
+            }
+            finally
+            {
+                if (File.Exists(dbCopyFileName))
+                {
+                    try { File.Delete(dbCopyFileName); }
+                    catch { }
+                }
+            }
+        }
         void ExportRows(DataRow[] rows, string type, string rankingCSVFilneName)
         {
             var tables = rows
