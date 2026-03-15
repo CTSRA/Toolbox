@@ -426,6 +426,8 @@ CREATE TABLE Rolskanet (
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            CleanupTemporaryDatabases();
+
             var templateDb = Path.Combine(AppPaths.TemplatesDir, "20252026.s3db");
             var templateSql = Path.Combine(AppPaths.TemplatesDir, "20252026Init.sql");
 
@@ -463,7 +465,7 @@ CREATE TABLE Rolskanet (
                 var table = await ExecuteSqliteScriptOnCopyAsync(
                     sourceFile,
                     "ranking.sql",
-                    "rk_copie"
+                    "rk_copie_à_supprimer"
                 );
 
                 var rankingCSVFileName = "Ranking " + Path.GetFileNameWithoutExtension(sourceFile);
@@ -502,7 +504,7 @@ CREATE TABLE Rolskanet (
                 var table = await ExecuteSqliteScriptOnCopyAsync(
                     sourceFile,
                     "medals.sql",
-                    "md_copie"
+                    "md_copie_à_supprimer"
                 );
 
                 if (table == null || table.Rows.Count == 0)
@@ -531,7 +533,12 @@ CREATE TABLE Rolskanet (
 
         private async Task<DataTable> ExecuteSqliteScriptOnCopyAsync(string sourceFile, string sqlFileName, string copySuffix)
         {
-            var dbCopyFileName = Path.Combine(Path.GetDirectoryName(sourceFile), $"{Guid.NewGuid()}_{copySuffix}.s3db");
+            Directory.CreateDirectory(AppPaths.SqliteDir);
+
+            var dbCopyFileName = Path.Combine(
+                AppPaths.SqliteDir,
+                $"{Guid.NewGuid():N}_{copySuffix}.s3db"
+            );
 
             try
             {
@@ -547,11 +554,45 @@ CREATE TABLE Rolskanet (
             }
             finally
             {
-                if (File.Exists(dbCopyFileName))
+                try
                 {
-                    try { File.Delete(dbCopyFileName); }
-                    catch { }
+                    if (File.Exists(dbCopyFileName))
+                        File.Delete(dbCopyFileName);
                 }
+                catch
+                {
+                }
+            }
+        }
+
+        private void CleanupTemporaryDatabases()
+        {
+            try
+            {
+                if (!Directory.Exists(AppPaths.SqliteDir))
+                    return;
+
+                var files = Directory.GetFiles(AppPaths.SqliteDir, "*_copie_à_supprimer.s3db");
+
+                foreach (var file in files)
+                {
+                    try
+                    {
+                        var age = DateTime.Now - File.GetCreationTime(file);
+
+                        // Supprime les fichiers temporaires vieux de plus de 60 minutes
+                        if (age.TotalMinutes > 60)
+                            File.Delete(file);
+                    }
+                    catch
+                    {
+                        // ignore si fichier verrouillé
+                    }
+                }
+            }
+            catch
+            {
+                // ignore
             }
         }
         void ExportRows(DataRow[] rows, string type, string rankingCSVFilneName)
