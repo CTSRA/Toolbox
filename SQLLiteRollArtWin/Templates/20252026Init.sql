@@ -194,16 +194,17 @@ SELECT distinct PanelExemple.ID_Judge,GaraParams.ID_GaraParams,PanelExemple.Role
 FROM GaraParams, PanelExemple;
 
 INSERT INTO Participants(ID_GaraParams, ID_Segment, ID_Atleta)
-SELECT 
+SELECT
     GaraParams.ID_GaraParams,
     GaraParams.ID_Segment,
     Athletes.ID_Atleta
 FROM Rolskanet
 INNER JOIN Specialites ON UPPER(Specialites.Libellé)=UPPER(Rolskanet.Type)
 INNER JOIN Athletes ON Athletes.Num_Licence=Rolskanet.[Numéro de licence] AND Athletes.ID_Specialita=Specialites.ID_Specialita
-INNER JOIN GaraParams ON upper(GaraParams.Name)=UPPER((Rolskanet.Filière) || ' ' || Rolskanet.[Sportif catégorie âge]) AND GaraParams.ID_Specialita=Specialites.ID_Specialita
-WHERE Athletes.ID_Specialita in (1,2,5,6,10,11) 
-GROUP BY  Athletes.ID_Atleta, GaraParams.ID_Category, GaraParams.ID_Specialita, GaraParams.ID_Segment;
+INNER JOIN GaraParams ON upper(GaraParams.Name)=UPPER((Rolskanet.Filière) || ' ' || Rolskanet.[Épreuve])
+AND GaraParams.ID_Specialita=Specialites.ID_Specialita
+WHERE Athletes.ID_Specialita in (1,2,5,6,10,11)
+GROUP BY  Athletes.ID_Atleta, GaraParams.ID_Category, GaraParams.ID_Specialita, GaraParams.ID_Segment
 
 WITH WindowOrder AS (
     SELECT ID_Atleta,
