@@ -204,7 +204,7 @@ INNER JOIN Athletes ON Athletes.Num_Licence=Rolskanet.[Numéro de licence] AND A
 INNER JOIN GaraParams ON upper(GaraParams.Name)=UPPER((Rolskanet.Filière) || ' ' || Rolskanet.[Épreuve])
 AND GaraParams.ID_Specialita=Specialites.ID_Specialita
 WHERE Athletes.ID_Specialita in (1,2,5,6,10,11)
-GROUP BY  Athletes.ID_Atleta, GaraParams.ID_Category, GaraParams.ID_Specialita, GaraParams.ID_Segment
+GROUP BY  Athletes.ID_Atleta, GaraParams.ID_Category, GaraParams.ID_Specialita, GaraParams.ID_Segment;
 
 WITH WindowOrder AS (
     SELECT ID_Atleta,
